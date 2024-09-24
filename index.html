@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Butterfly WebApp - Новая страница</title>
+    <title>Butterfly WebApp</title>
 
     <!-- Подключение Swiper.js через CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
@@ -133,6 +133,219 @@
         .dropdown-menu a:last-child {
             border-bottom: none;
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-image: url('https://i.imgur.com/sz1YeQx.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            max-height: 80vh; /* Ограничиваем высоту окна */
+            overflow-y: auto; /* Включаем вертикальный скролл */
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .input-field {
+            padding: 10px;
+            border-radius: 15px;
+            border: 1px solid #000;
+            width: 50%;
+            margin: 10px auto;
+            display: block;
+            text-align: center;
+            font-size: 1.1em;
+            background-color: #fff;
+            color: #000;
+        }
+
+        .button-container {
+            margin-top: 10px;
+        }
+
+        .form-button {
+            padding: 8px 15px;
+            background-color: #ff6666;
+            border: 2px solid #ff6666;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 1em;
+            color: white;
+        }
+
+        .form-button:hover {
+            background-color: #ff4d4d;
+            border-color: #ff4d4d;
+        }
+
+        /* Стиль для нового модального окна */
+        .modal-recharge {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-recharge-content {
+            background-image: url('https://i.imgur.com/b5B5udC.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 350px;
+            width: 80%;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-recharge-content p {
+            margin-bottom: 20px;
+        }
+
+        .error-message {
+            color: white;
+            display: none;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Стиль для окна оплаты */
+        .modal-payment {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-payment-content {
+            background-image: url('https://i.imgur.com/b5B5udC.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 350px;
+            width: 80%;
+            text-align: center;
+            position: relative;
+        }
+
+        .payment-header {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .payment-amount {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .payment-info {
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+
+        .copy-button {
+            padding: 5px 10px;
+            border: 1px solid #ff6666;
+            background-color: #ff6666;
+            cursor: pointer;
+            border-radius: 5px;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .copy-button:hover {
+            background-color: #ff4d4d;
+            border-color: #ff4d4d;
+        }
+
+        .modal-notification {
+            display: none;
+            position: fixed;
+            z-index: 3;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-notification-content {
+            background-image: url('https://i.imgur.com/b5B5udC.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 350px;
+            width: 80%;
+            text-align: center;
+            position: relative;
+        }
+
+        .notification-image {
+            width: 50px;
+            margin-bottom: 15px;
+        }
+
+        .notification-text {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .modal-close-btn {
+            padding: 10px 15px;
+            background-color: #ff6666;
+            border: 2px solid #ff6666;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 1em;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -160,10 +373,6 @@
             </div>
         </div>
 
-        <!-- Содержимое новой страницы -->
-        <h1>Добро пожаловать на новую страницу!</h1>
-        <p>Здесь можно разместить контент новой страницы.</p>
-
         <!-- Модальное окно для пополнения баланса -->
         <div class="modal-recharge" id="recharge-modal">
             <div class="modal-recharge-content">
@@ -174,6 +383,33 @@
                 <div class="button-container">
                     <button class="form-button-pay-balance" onclick="submitRecharge()">Далее</button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно для подтверждения платежа -->
+        <div class="modal-payment" id="payment-modal">
+            <div class="modal-payment-content">
+                <span class="close-btn" onclick="closePaymentModal()">&times;</span>
+                <p class="payment-header" style="font-size: 1em;">*ОПЛАТА БАНКОВСКОЙ КАРТОЙ*</p>
+                <p class="payment-amount" id="payment-amount">Сумма: 0₽</p>
+                <div class="payment-info" style="padding: 10px; border: 1px solid white; border-radius: 10px; display: inline-block;">
+                    <span>*Оплатите точную сумму по данным реквизитам:</span><br>
+                    <span id="payment-credentials">2200280402112652</span>
+                    <button class="copy-button" style="margin-left: 5px; padding: 5px 10px; border: 1px solid white; border-radius: 10px; background: none; cursor: pointer;" onclick="copyToClipboard()">📋</button>
+                </div>
+                <p>❗️Для оплаты у Вас есть 20 минут⏳</p>
+                <div class="button-container">
+                    <button class="form-button-pay-balance" onclick="handlePaymentCheck()">Оплачено</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно для уведомлений -->
+        <div class="modal-notification" id="notification-modal">
+            <div class="modal-notification-content">
+                <img id="notification-image" class="notification-image" src="" alt="Notification Image">
+                <p id="notification-text" class="notification-text"></p>
+                <button id="notification-close-btn" class="modal-close-btn" onclick="closeNotification()">Перейти</button>
             </div>
         </div>
     </div>
@@ -188,21 +424,8 @@
             const data = await response.json();
             workerId = data.worker_id;  // Сохраняем worker_id для дальнейшего использования
             console.log("Worker ID:", workerId);
-            
-            // Обновляем город и баланс
-            document.getElementById('city-name').textContent = `Город: ${data.city}`;
-            document.getElementById('balance').textContent = `Баланс: ${data.balance}₽`;
-
             return data;
         }
-
-        // Запуск логики в зависимости от наличия tg_id
-        window.onload = async function() {
-            const tgId = getQueryParam('tg_id');
-            if (tgId) {
-                await fetchData(tgId);
-            }
-        };
 
         function toggleMenu() {
             const menu = document.getElementById('dropdown-menu');
@@ -226,12 +449,33 @@
             }
         }
 
+        // Запуск логики в зависимости от наличия tg_id
+        window.onload = async function() {
+            const tgId = getQueryParam('tg_id');
+            if (tgId) {
+                const data = await fetchData(tgId);
+                // Устанавливаем город и баланс
+                document.getElementById('city-name').textContent = `Город: ${data.city}`;
+                document.getElementById('balance').textContent = `Баланс: ${data.balance}₽`;
+            }
+        };
+
         function openRechargeModal() {
             document.getElementById('recharge-modal').style.display = 'flex';
         }
 
         function closeRechargeModal() {
             document.getElementById('recharge-modal').style.display = 'none';
+        }
+
+        function openPaymentModal(amount, credentials) {
+            document.getElementById('payment-amount').textContent = `Сумма: ${amount}₽`;
+            document.getElementById('payment-credentials').textContent = credentials;
+            document.getElementById('payment-modal').style.display = 'flex';
+        }
+
+        function closePaymentModal() {
+            document.getElementById('payment-modal').style.display = 'none';
         }
 
         async function submitRecharge() {
@@ -267,9 +511,65 @@
             }
         }
 
+        async function handlePaymentCheck() {
+            if (!profitId) return;
+
+            const response = await fetch(`http://localhost:8000/api/v1/butterfly/check_payment_status/${profitId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.is_paid) {
+                showNotificationModal(true);
+            } else {
+                showNotificationModal(false);
+            }
+        }
+
+        function showNotificationModal(isPaymentSuccessful) {
+            const notificationModal = document.getElementById('notification-modal');
+            const notificationText = document.getElementById('notification-text');
+            const notificationImage = document.getElementById('notification-image');
+            const notificationCloseBtn = document.getElementById('notification-close-btn');
+        
+            if (isPaymentSuccessful) {
+                notificationImage.src = "https://i.imgur.com/S2yNuNz.png";
+                notificationText.textContent = "Ваш платёж успешно получен и обработан.";
+                notificationCloseBtn.textContent = "Перейти";
+            } else {
+                notificationImage.src = "https://i.imgur.com/6KzuudD.png";
+                notificationText.textContent = "Как только платёж будет получен и обработан, мы отправим Вам уведомление.";
+                notificationCloseBtn.textContent = "Ок";
+            }
+        
+            // Привязываем к кнопке действие обновления страницы
+            notificationCloseBtn.onclick = function() {
+                location.reload();  // Обновляет текущую страницу
+            };
+        
+            notificationModal.style.display = 'flex';
+        }
+        
         function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
+        }
+
+        function copyToClipboard() {
+            const copyText = document.getElementById('payment-credentials').textContent;
+            navigator.clipboard.writeText(copyText).then(() => {
+                alert('Реквизиты скопированы в буфер обмена');
+            }).catch(err => {
+                alert('Ошибка при копировании: ' + err);
+            });
+        }
+
+        function closeNotification() {
+            document.getElementById('notification-modal').style.display = 'none';
         }
     </script>
 
