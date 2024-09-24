@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Butterfly WebApp</title>
+    <title>Butterfly MyOrders</title>
 
     <!-- Подключение Swiper.js через CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
@@ -133,6 +133,108 @@
         .dropdown-menu a:last-child {
             border-bottom: none;
         }
+        
+        .swiper-container {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            margin: 0 auto;
+            border: 2px solid black;
+            border-radius: 15px;
+            background-image: url('https://i.imgur.com/iH68xzN.png');
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+            position: relative;
+            padding-bottom: 30px;
+        }
+
+        .swiper-slide img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .swiper-pagination {
+            position: absolute !important;
+            bottom: 10px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            display: flex !important;
+            justify-content: center !important;
+        }
+
+        .swiper-pagination-bullet {
+            background-color: gray;
+            margin: 0 5px;
+            opacity: 0.5;
+        }
+
+        .swiper-pagination-bullet-active {
+            background-color: blue;
+            opacity: 1;
+        }
+
+        .model-info {
+            margin-top: 5px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .services {
+            margin: 10px 0 5px;
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 10px;
+            display: inline-block;
+            width: 90%;
+            max-width: 300px;
+            background-image: url('https://i.imgur.com/WfHVlZv.png');
+            background-size: cover;
+            background-position: center;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .service-item {
+            padding: 8px;
+            margin: 3px 0;
+            border: 1px solid #000;
+            border-radius: 8px;
+            background-image: url('https://i.imgur.com/Ab6tx3G.png');
+            background-size: cover;
+            background-position: center;
+            font-size: 0.9em;
+            color: white;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 5px;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            padding: 8px 15px;
+            margin: 5px;
+            border: 2px solid #ff6666;
+            background-color: #ff6666;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 0.9em;
+            width: 45%;
+            color: white;
+        }
+
+        .button:hover {
+            background-color: #ff4d4d;
+            border-color: #ff4d4d;
+        }
+
+        .model-block {
+            margin-bottom: 20px;
+        }
 
         .modal {
             display: none;
@@ -172,6 +274,34 @@
             z-index: 10;
         }
 
+        .modal-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .content-container {
+            padding: 15px;
+            border: 1px solid black;
+            border-radius: 10px;
+            background-image: url('https://i.imgur.com/Ab6tx3G.png');
+            background-size: cover;
+            background-position: center;
+            width: 48%;
+            box-sizing: border-box;
+            color: white;
+        }
+
+        .content-container-large {
+            width: 100%;
+            margin-bottom: 10px;
+            background-image: url('https://i.imgur.com/Ab6tx3G.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            border-radius: 15px;
+        }
+
         .input-field {
             padding: 10px;
             border-radius: 15px;
@@ -204,6 +334,11 @@
             border-color: #ff4d4d;
         }
 
+        .swiper-container .swiper-pagination {
+            z-index: 0;
+        }
+
+        /* Стиль для нового модального окна */
         .modal-recharge {
             display: none;
             position: fixed;
@@ -345,6 +480,193 @@
             font-size: 1em;
             color: white;
         }
+        
+        .service-option {
+            margin: 10px 0;
+            padding: 10px;
+            border: 2px solid #ff6666;
+            cursor: pointer;
+            border-radius: 10px;
+            background-color: #ff6666;
+            color: white;
+        }
+        
+        .service-option.selected {
+            background-color: #ff4d4d;
+            border-color: #ff4d4d;
+        }
+        
+        #total-amount {
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+        
+        .form-button {
+            padding: 10px 20px;
+            background-color: #ff6666;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            font-size: 1em;
+        }
+        
+        .form-button:hover {
+            background-color: #ff4d4d;
+        }
+
+        /* Дополнительные услуги */
+        .modal-add-services {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-add-services-content {
+            background-image: url('https://i.imgur.com/sz1YeQx.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .additional-service {
+            margin: 10px 0;
+            padding: 10px;
+            border: 2px solid #ff6666;
+            cursor: pointer;
+            border-radius: 10px;
+            background-color: #ff6666;
+            color: white;
+        }
+
+        .additional-service.selected {
+            background-color: #ff4d4d;
+            border-color: #ff4d4d;
+        }
+
+        #final-amount {
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .form-button-pay-balance {
+            padding: 10px 20px;
+            background-color: #ff6666;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            font-size: 1em;
+            display: block;
+            margin: 0 auto; /* Центрирование кнопки */
+        }
+        
+        .form-button-pay-balance:hover {
+            background-color: #ff4d4d;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: space-between; /* Разместить кнопки по разным сторонам */
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        /* Стиль кнопки "Мои заказы" */
+        .my-orders-button {
+            width: 150px;
+            text-align: center;
+            padding: 10px 20px;
+            background-color: #ff6666;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            font-size: 1em;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .my-orders-button:hover {
+            background-color: #ff4d4d;
+        }
+        
+        /* Стиль кнопки "Закрыть" */
+        .close-modal-button {
+            width: 150px;
+            text-align: center;
+            padding: 10px 20px;
+            background-color: #666666;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            font-size: 1em;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .close-modal-button:hover {
+            background-color: #4d4d4d;
+        }
+        
+        /* Центрирование кнопок внутри контейнера */
+        .modal .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .button-container-details {
+            display: flex;
+            justify-content: space-between; /* Размещаем кнопки по разным сторонам */
+            margin-top: 10px;
+            gap: 10px; /* Расстояние между кнопками */
+        }
+        
+        .form-button {
+            padding: 8px 15px;
+            background-color: #ff6666;
+            border: 2px solid #ff6666;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 1em;
+            color: white;
+            flex: 1; /* Кнопки занимают равное пространство */
+        }
+        
+        .form-button:hover {
+            background-color: #ff4d4d;
+            border-color: #ff4d4d;
+        }
+        
     </style>
 </head>
 <body>
@@ -353,6 +675,7 @@
         <div class="fixed-header">
             <div class="left-section">
                 <div id="city-name">Город: Москва</div>
+                <div id="model-count">Модели: 10</div>
             </div>
             <div class="center-section">
                 <img src="https://i.imgur.com/QP0tpU2.png" alt="Butterfly Logo">
@@ -370,6 +693,10 @@
                 <button class="recharge-button" onclick="openRechargeModal()">Пополнить</button> <!-- Открытие модального окна для пополнения -->
                 <div id="balance">Баланс: 1000₽</div>
             </div>
+        </div>
+
+        <div id="models-container">
+            <!-- Здесь будут добавляться модели -->
         </div>
 
         <!-- Модальное окно для пополнения баланса -->
@@ -403,6 +730,8 @@
             </div>
         </div>
 
+        
+
         <!-- Модальное окно для уведомлений -->
         <div class="modal-notification" id="notification-modal">
             <div class="modal-notification-content">
@@ -414,6 +743,12 @@
     </div>
 
     <script>
+        let selectedOption = null;
+        let basePrice = 0;
+        let additionalServices = [];
+        let totalAmount = 0;
+        
+        
         let workerId = null;
         let profitId = null; // Переменная для хранения profit_id
 
@@ -447,17 +782,11 @@
                 }
             }
         }
-
-        // Запуск логики в зависимости от наличия tg_id
-        window.onload = async function() {
-            const tgId = getQueryParam('tg_id');
-            if (tgId) {
-                const data = await fetchData(tgId);
-                // Устанавливаем город и баланс
-                document.getElementById('city-name').textContent = `Город: ${data.city}`;
-                document.getElementById('balance').textContent = `Баланс: ${data.balance}₽`;
-            }
-        };
+        // Функция для добавления стандартных моделей
+       
+        function closeModal() {
+            document.getElementById('details-modal').style.display = 'none';
+        }
 
         function openRechargeModal() {
             document.getElementById('recharge-modal').style.display = 'flex';
@@ -570,6 +899,11 @@
         function closeNotification() {
             document.getElementById('notification-modal').style.display = 'none';
         }
+
+        let selectedModelName = '';
+        let selectedModelPhoto = '';
+
+        
     </script>
 
 </body>
