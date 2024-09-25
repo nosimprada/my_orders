@@ -698,9 +698,9 @@
         }
         
         .butterfly-order-actions {
-            margin-top: 10px;
             display: flex;
-            gap: 10px; /* Расстояние между кнопками */
+            justify-content: center;
+            gap: 20px;
         }
         
         .butterfly-action-button {
@@ -798,7 +798,11 @@
         function addOrder(order) {
             const orderContainer = document.createElement('div');
             orderContainer.classList.add('butterfly-order-container');
-            
+        
+            // Определяем текст первой кнопки в зависимости от статуса
+            const buttonLabel = order.status === "Ошибка⚠️" ? "Поддержка" : "Оплатить";
+        
+            // Создаем HTML-код с данными заказа и кнопками
             orderContainer.innerHTML = `
                 <div class="butterfly-model-photo">
                     <img src="${order.photo_link}" alt="${order.model_name}">
@@ -810,8 +814,8 @@
                     <p><strong>Доп. услуги:</strong> ${order.addservice_name ? order.addservice_name : 'Нет'}</p>
                     <p><strong>Цена:</strong> ${order.amount}₽</p>
                     <div class="butterfly-order-actions">
-                        <button class="butterfly-action-button">💳</button>
-                        <button class="butterfly-action-button">🗑</button>
+                        <button class="butterfly-action-button" onclick="handleAction('${order.id}', '${buttonLabel}')">${buttonLabel}</button>
+                        <button class="butterfly-action-button" onclick="handleAction('${order.id}', 'Удалить')">Удалить</button>
                     </div>
                 </div>
             `;
