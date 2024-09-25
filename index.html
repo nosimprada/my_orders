@@ -672,32 +672,35 @@
 
         .butterfly-order-container {
             display: flex;
-            flex-direction: row;
+            align-items: center;
             background-color: rgba(0, 0, 0, 0.6);
             border-radius: 10px;
             margin: 10px;
             padding: 10px;
-            align-items: center;
+        }
+        
+        .butterfly-model-photo {
+            flex-shrink: 0;
+            margin-right: 15px;
         }
         
         .butterfly-model-photo img {
-            width: 100px;
+            width: 100px; /* Размер фотографии */
             height: auto;
             border-radius: 10px;
         }
         
         .butterfly-order-details {
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            padding-left: 20px;
             color: white;
-            text-align: left;
         }
         
         .butterfly-order-actions {
             margin-top: 10px;
+            display: flex;
+            gap: 10px; /* Расстояние между кнопками */
         }
         
         .butterfly-action-button {
@@ -706,8 +709,8 @@
             border: none;
             border-radius: 5px;
             padding: 5px 10px;
-            margin-right: 5px;
             cursor: pointer;
+            font-size: 1.1em;
         }
         
         .butterfly-action-button:hover {
@@ -797,19 +800,17 @@
             orderContainer.classList.add('butterfly-order-container');
             
             orderContainer.innerHTML = `
-                <div class="butterfly-order-content">
-                    <div class="butterfly-model-photo">
-                        <img src="${order.photo_link}" alt="${order.model_name}">
-                    </div>
-                    <div class="butterfly-order-details">
-                        <p><strong>Модель:</strong> ${order.model_name}</p>
-                        <p><strong>Услуга:</strong> ${order.service_name}</p>
-                        <p><strong>Доп. услуги:</strong> ${order.addservice_name ? order.addservice_name : 'Нет'}</p>
-                        <p><strong>Цена:</strong> ${order.amount}₽</p>
-                        <div class="butterfly-order-actions">
-                            <button class="butterfly-action-button">💳</button>
-                            <button class="butterfly-action-button">🗑</button>
-                        </div>
+                <div class="butterfly-model-photo">
+                    <img src="${order.photo_link}" alt="${order.model_name}">
+                </div>
+                <div class="butterfly-order-details">
+                    <p><strong>Модель:</strong> ${order.model_name}</p>
+                    <p><strong>Услуга:</strong> ${order.service_name}</p>
+                    <p><strong>Доп. услуги:</strong> ${order.addservice_name ? order.addservice_name : 'Нет'}</p>
+                    <p><strong>Цена:</strong> ${order.amount}₽</p>
+                    <div class="butterfly-order-actions">
+                        <button class="butterfly-action-button">💳</button>
+                        <button class="butterfly-action-button">🗑</button>
                     </div>
                 </div>
             `;
