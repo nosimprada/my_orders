@@ -683,7 +683,7 @@
                 <div class="dropdown-menu" id="dropdown-menu">
                     <a href="#about-us">О нас</a>
                     <a href="#profile">Профиль</a>
-                    <a href="#" id="orders-link">Заказы</a>
+                    <a href="#orders">Заказы</a>
                     <a href="#rules">Правила</a>
                     <a href="#guarantees">Гарантии</a>
                     <a href="#support">Тех.Поддержка</a>
@@ -695,13 +695,8 @@
             </div>
         </div>
 
-        <div id="orders-container">
-            <div id="new-orders">
-                <h2>Новые заказы</h2>
-            </div>
-            <div id="closed-orders">
-                <h2>Закрытые заказы</h2>
-            </div>
+        <div id="models-container">
+            <!-- Здесь будут добавляться модели -->
         </div>
         
         <!-- Модальное окно для пополнения баланса -->
@@ -735,6 +730,8 @@
             </div>
         </div>
 
+        
+
         <!-- Модальное окно для уведомлений -->
         <div class="modal-notification" id="notification-modal">
             <div class="modal-notification-content">
@@ -746,6 +743,26 @@
     </div>
 
     <script>
+        let selectedOption = null;
+        let basePrice = 0;
+        let additionalServices = [];
+        let totalAmount = 0;
+        
+        
+        
+        
+        
+        
+        
+        
+        function cancelOrder() {
+            closeAddServicesModal();
+        }
+        
+        function closeAddServicesModal() {
+            document.getElementById('add-services-modal').style.display = 'none';
+        }
+
         let workerId = null;
         let profitId = null; // Переменная для хранения profit_id
 
@@ -766,7 +783,7 @@
                 menu.style.display = 'block';
             }
         }
-
+        
         // Закрытие меню при клике вне его области
         window.onclick = function(event) {
             if (!event.target.matches('.menu-button')) {
@@ -779,41 +796,8 @@
                 }
             }
         }
-        // Добавляем функцию, которая ранее отсутствовала
-        function openRechargeModal() {
-            document.getElementById('recharge-modal').style.display = 'flex';
-        }
-        // Функция для добавления заказов в DOM
-        function addOrder(order, containerId) {
-            const orderBlock = document.createElement('div');
-            orderBlock.classList.add('order-block');
-
-            orderBlock.innerHTML = `
-                <div class="swiper-container">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide"><img src="${order.photo_link}" alt="Фото модели"></div>
-                    </div>
-                    <div class="swiper-pagination"></div>
-                </div>
-                <div class="order-info">
-                    <p>Модель: ${order.model_name}</p>
-                    <p>Услуга: ${order.service_name}</p>
-                    <p>Доп.услуги: ${order.addservice_name || 'Отсутствуют'}</p>
-                    <p>Сумма: ${order.amount}₽</p>
-                    <p>Статус: ${order.status}</p>
-                </div>
-            `;
-
-            document.getElementById(containerId).appendChild(orderBlock);
-
-            new Swiper(orderBlock.querySelector('.swiper-container'), {
-                loop: true,
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-            });
-        }
+        
+        
 
         // Запуск логики в зависимости от наличия tg_id
         window.onload = async function() {
@@ -824,37 +808,34 @@
                 document.getElementById('city-name').textContent = `Город: ${data.city}`;
                 document.getElementById('balance').textContent = `Баланс: ${data.balance}₽`;
 
-                const orders = await fetchOrders(tgId);
-                orders.forEach(order => {
-                    if (order.status === "new") {
-                        addOrder(order, "new-orders");
-                    } else if (order.status === "conf") {
-                        addOrder(order, "closed-orders");
-                    }
-                });
             }
         };
 
-        async function fetchOrders(userId) {
-            const response = await fetch(`http://localhost:8000/api/v1/butterfly/orders/${userId}`);
-            const orders = await response.json();
-            return orders;
+        function closeModal() {
+            document.getElementById('details-modal').style.display = 'none';
+        }
+        
+        
+        function closeModal() {
+            document.getElementById('details-modal').style.display = 'none';
         }
 
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
+        function openRechargeModal() {
+            document.getElementById('recharge-modal').style.display = 'flex';
         }
 
-        function copyToClipboard() {
-            const copyText = document.getElementById('payment-credentials').textContent;
-            navigator.clipboard.writeText(copyText).catch(err => {
-                console.error('Ошибка при копировании: ' + err);
-            });
+        function closeRechargeModal() {
+            document.getElementById('recharge-modal').style.display = 'none';
         }
 
-        function closeNotification() {
-            document.getElementById('notification-modal').style.display = 'none';
+        function openPaymentModal(amount, credentials) {
+            document.getElementById('payment-amount').textContent = `Сумма: ${amount}₽`;
+            document.getElementById('payment-credentials').textContent = credentials;
+            document.getElementById('payment-modal').style.display = 'flex';
+        }
+
+        function closePaymentModal() {
+            document.getElementById('payment-modal').style.display = 'none';
         }
 
         async function submitRecharge() {
@@ -932,15 +913,113 @@
         
             notificationModal.style.display = 'flex';
         }
-
-        function closeRechargeModal() {
-            document.getElementById('recharge-modal').style.display = 'none';
+        
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
         }
 
-        function closePaymentModal() {
-            document.getElementById('payment-modal').style.display = 'none';
+        function copyToClipboard() {
+            const copyText = document.getElementById('payment-credentials').textContent;
+            navigator.clipboard.writeText(copyText).catch(err => {
+                console.error('Ошибка при копировании: ' + err);
+            });
         }
 
+        function closeNotification() {
+            document.getElementById('notification-modal').style.display = 'none';
+        }
+
+        let selectedModelName = '';
+        let selectedModelPhoto = '';
+
+        async function confirmOrder() {
+            const tgId = getQueryParam('tg_id');  // Получение tg_id из URL
+            
+            const serviceName = selectedOption;
+            let addserviceName = '';
+        
+            // Получаем выбранные дополнительные услуги
+            const selectedServices = document.querySelectorAll('.additional-service.selected');
+            if (selectedServices.length > 0) {
+                addserviceName = Array.from(selectedServices).map(service => service.textContent.split(':')[0].trim()).join(', ');
+            }
+        
+            const payload = {
+                mammoth_id: parseInt(tgId, 10),
+                model_name: selectedModelName,  // Используем имя выбранной модели
+                photo_link: selectedModelPhoto,  // Используем ссылку на фото выбранной модели
+                service_name: serviceName,  // Включаем видеозвонок, если он выбран
+                addservice_name: addserviceName,
+                amount: totalAmount,
+                status: "new"
+            };
+        
+            try {
+                const response = await fetch('http://localhost:8000/api/v1/butterfly/create_order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+        
+                if (response.ok) {
+                    closeOrderModal();  // Закрываем предыдущее окно (окно заказа)
+                    closeAddServicesModal();  // Закрываем окно дополнительных услуг, если оно открыто
+                    showOrderSuccessModal();  // Показываем всплывающее окно при успешном создании заказа
+                } else {
+                    const errorData = await response.json();
+                    console.error('Ошибка сервера:', errorData);  // Выводим полную ошибку в консоль
+                    alert('Произошла ошибка при создании заказа: ' + JSON.stringify(errorData));
+                }
+            } catch (error) {
+                alert('Произошла ошибка при отправке запроса: ' + error.message);
+            }
+        }
+       function closeOrderModal() {
+            const orderModal = document.getElementById('order-modal');
+            if (orderModal) {
+                orderModal.style.display = 'none';
+            }
+        }
+        
+        function closeAddServicesModal() {
+            const addServicesModal = document.getElementById('add-services-modal');
+            if (addServicesModal) {
+                addServicesModal.style.display = 'none';
+            }
+        }
+        
+        function showOrderSuccessModal() {
+            const successModal = document.getElementById('order-success-modal');
+            if (successModal) {
+                successModal.style.display = 'flex';
+            }
+        }
+        
+        function closeSuccessModal() {
+            const successModal = document.getElementById('order-success-modal');
+            if (successModal) {
+                successModal.style.display = 'none';
+            }
+            location.reload(); // Обновляем страницу после закрытия модального окна
+        }
+        
+        function openMyOrdersPage() {
+            window.location.href = 'https://your-website.com/my-orders';  // Замените на URL страницы "Мои заказы"
+        }
+        
+        function closeAddServicesModal() {
+            const addServicesModal = document.getElementById('add-services-modal');
+            if (addServicesModal) {
+                addServicesModal.style.display = 'none';
+            }
+        }
+        
+        function cancelOrder() {
+            closeAddServicesModal();  // Закрываем модальное окно
+        }
     </script>
 
 </body>
