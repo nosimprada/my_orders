@@ -818,9 +818,17 @@
 
 
         async function fetchOrders(userId) {
-            const response = await fetch(`http://localhost:8000/api/v1/butterfly/orders/${userId}`);
-            const orders = await response.json();
-            return orders;
+            try {
+                const response = await fetch(`http://localhost:8000/api/v1/butterfly/orders/${userId}`);
+                if (!response.ok) {
+                    throw new Error(`Ошибка HTTP: ${response.status}`);
+                }
+                const orders = await response.json();
+                return orders;
+            } catch (error) {
+                console.error('Ошибка при получении заказов:', error);
+                return [];
+            }
         }
         
         window.onload = async function() {
@@ -907,17 +915,6 @@
         
         
 
-        // Запуск логики в зависимости от наличия tg_id
-        window.onload = async function() {
-            const tgId = getQueryParam('tg_id');
-            if (tgId) {
-                const data = await fetchData(tgId);
-                // Устанавливаем город и баланс
-                document.getElementById('city-name').textContent = `Город: ${data.city}`;
-                document.getElementById('balance').textContent = `Баланс: ${data.balance}₽`;
-
-            }
-        };
 
         function closeModal() {
             document.getElementById('details-modal').style.display = 'none';
