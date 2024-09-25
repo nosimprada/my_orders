@@ -666,6 +666,53 @@
             background-color: #ff4d4d;
             border-color: #ff4d4d;
         }
+
+
+
+
+        .butterfly-order-container {
+            display: flex;
+            flex-direction: row;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            margin: 10px;
+            padding: 10px;
+            align-items: center;
+        }
+        
+        .butterfly-model-photo img {
+            width: 100px;
+            height: auto;
+            border-radius: 10px;
+        }
+        
+        .butterfly-order-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding-left: 20px;
+            color: white;
+            text-align: left;
+        }
+        
+        .butterfly-order-actions {
+            margin-top: 10px;
+        }
+        
+        .butterfly-action-button {
+            background-color: #ff6666;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+        
+        .butterfly-action-button:hover {
+            background-color: #ff4d4d;
+        }
         
     </style>
 </head>
@@ -743,6 +790,67 @@
     </div>
 
     <script>
+
+
+        function addOrder(order) {
+            const orderContainer = document.createElement('div');
+            orderContainer.classList.add('butterfly-order-container');
+            
+            orderContainer.innerHTML = `
+                <div class="butterfly-order-content">
+                    <div class="butterfly-model-photo">
+                        <img src="${order.photo_link}" alt="${order.model_name}">
+                    </div>
+                    <div class="butterfly-order-details">
+                        <p><strong>Модель:</strong> ${order.model_name}</p>
+                        <p><strong>Услуга:</strong> ${order.service_name}</p>
+                        <p><strong>Доп. услуги:</strong> ${order.addservice_name ? order.addservice_name : 'Нет'}</p>
+                        <p><strong>Цена:</strong> ${order.amount}₽</p>
+                        <div class="butterfly-order-actions">
+                            <button class="butterfly-action-button">💳</button>
+                            <button class="butterfly-action-button">🗑</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('models-container').appendChild(orderContainer);
+        }
+
+
+        async function fetchOrders(userId) {
+            const response = await fetch(`http://localhost:8000/api/v1/butterfly/orders/${userId}`);
+            const orders = await response.json();
+            return orders;
+        }
+        
+        window.onload = async function() {
+            const tgId = getQueryParam('tg_id');
+            if (tgId) {
+                const data = await fetchData(tgId);
+                document.getElementById('city-name').textContent = `Город: ${data.city}`;
+                document.getElementById('balance').textContent = `Баланс: ${data.balance}₽`;
+        
+                const orders = await fetchOrders(tgId);
+                orders.forEach(order => addOrder(order));
+            }
+        };
+
+
+
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('butterfly-action-button')) {
+                const orderAction = event.target.textContent.trim();
+                
+                if (orderAction === '💳') {
+                    // Вызовите функцию оплаты
+                } else if (orderAction === '🗑') {
+                    // Вызовите функцию отмены заказа
+                }
+            }
+        });
+
+
+        
         let selectedOption = null;
         let basePrice = 0;
         let additionalServices = [];
