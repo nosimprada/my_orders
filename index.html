@@ -890,10 +890,29 @@
             document.getElementById('delete-confirm-modal').style.display = 'none';
         }
         
-        function confirmDelete() {
+        async function confirmDelete() {
             if (deleteOrderId !== null) {
-                console.log(`Удаление заказа с ID: ${deleteOrderId}`);
-                closeDeleteConfirmModal();
+                try {
+                    const response = await fetch(`http://localhost:8000/api/v1/butterfly/orders/${deleteOrderId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+        
+                    if (response.ok) {
+                        alert('Заказ успешно удален');
+                        closeDeleteConfirmModal();
+                        location.reload();  // Обновляем страницу для актуализации данных
+                    } else {
+                        const errorData = await response.json();
+                        console.error('Ошибка при удалении заказа:', errorData);
+                        alert('Произошла ошибка при удалении заказа');
+                    }
+                } catch (error) {
+                    console.error('Ошибка при отправке запроса:', error);
+                    alert('Не удалось отправить запрос на сервер');
+                }
             }
         }
         
