@@ -683,7 +683,7 @@
                 <div class="dropdown-menu" id="dropdown-menu">
                     <a href="#about-us">О нас</a>
                     <a href="#profile">Профиль</a>
-                    <a href="orders-link">Заказы</a>
+                    <a href="#" id="orders-link">Заказы</a>
                     <a href="#rules">Правила</a>
                     <a href="#guarantees">Гарантии</a>
                     <a href="#support">Тех.Поддержка</a>
@@ -695,8 +695,13 @@
             </div>
         </div>
 
-        <div id="models-container">
-            <!-- Здесь будут добавляться модели -->
+        <div id="orders-container">
+            <div id="new-orders">
+                <h2>Новые заказы</h2>
+            </div>
+            <div id="closed-orders">
+                <h2>Закрытые заказы</h2>
+            </div>
         </div>
         
         <!-- Модальное окно для пополнения баланса -->
@@ -730,8 +735,6 @@
             </div>
         </div>
 
-        
-
         <!-- Модальное окно для уведомлений -->
         <div class="modal-notification" id="notification-modal">
             <div class="modal-notification-content">
@@ -743,142 +746,6 @@
     </div>
 
     <script>
-        let selectedOption = null;
-        let basePrice = 0;
-        let additionalServices = [];
-        let totalAmount = 0;
-        
-        function openOrderModal(button) {
-            const modelName = button.getAttribute('data-name');
-            const modelPhoto = button.getAttribute('data-photo');
-            const hour = button.getAttribute('data-hour');
-            const twohours = button.getAttribute('data-twohours');
-            const night = button.getAttribute('data-night');
-            const video_call = button.getAttribute('data-videocall');
-            const addservices = button.getAttribute('data-addservices');
-        
-            // Сохраняем имя и фото модели в переменные для последующего использования
-            selectedModelName = modelName;
-            selectedModelPhoto = modelPhoto;
-        
-            document.getElementById('hour-option').textContent = `Час: ${hour}₽`;
-            document.getElementById('twohours-option').textContent = `Два часа: ${twohours}₽`;
-            document.getElementById('night-option').textContent = `Ночь: ${night}₽`;
-            document.getElementById('video_call-option').textContent = `Видеозвонок: ${video_call}₽`;
-        
-            if (addservices) {
-                additionalServices = addservices.split(',').map(service => {
-                    const [name, price] = service.split(':');
-                    return { name: name.trim(), price: parseInt(price.trim(), 10) };
-                });
-            } else {
-                additionalServices = [];
-            }
-        
-            document.getElementById('order-modal').style.display = 'flex';
-        }
-        
-        function closeOrderModal() {
-            document.getElementById('order-modal').style.display = 'none';
-        }
-        
-        function selectOption(option) {
-            selectedOption = option;
-        
-            // Удаляем выделение со всех опций
-            document.getElementById('hour-option').classList.remove('selected');
-            document.getElementById('twohours-option').classList.remove('selected');
-            document.getElementById('night-option').classList.remove('selected');
-            document.getElementById('video_call-option').classList.remove('selected');
-        
-            // Выделяем выбранную опцию
-            document.getElementById(`${option}-option`).classList.add('selected');
-        
-            // Обновляем итоговую сумму в зависимости от выбора
-            switch (option) {
-                case 'hour':
-                    basePrice = parseInt(document.getElementById('hour-option').textContent.split(' ')[1].replace('₽', ''));
-                    break;
-                case 'twohours':
-                    basePrice = parseInt(document.getElementById('twohours-option').textContent.split(' ')[2].replace('₽', ''));
-                    break;
-                case 'night':
-                    basePrice = parseInt(document.getElementById('night-option').textContent.split(' ')[1].replace('₽', ''));
-                    break;
-                case 'video_call':
-                    basePrice = parseInt(document.getElementById('video_call-option').textContent.split(' ')[1].replace('₽', ''));
-                    break;
-            }
-        
-            totalAmount = basePrice;
-            document.getElementById('total-amount').textContent = `Итого: ${totalAmount}₽`;
-        
-            // Активируем кнопку "Далее", если выбрана хотя бы одна услуга
-            document.getElementById('proceed-button').disabled = false;
-        }
-        
-        function proceedToAddServices() {
-            if (!selectedOption) {
-                alert('Пожалуйста, выберите услугу перед тем, как продолжить.');
-                return;
-            }
-            // Остальная логика для обработки перехода к дополнительным услугам
-        }
-        
-        function proceedToAddServices() {
-            if (!selectedOption) {
-                alert('Пожалуйста, выберите услугу перед тем, как продолжить.');
-                return;
-            }
-        
-            // Если дополнительные услуги отсутствуют или выбран видеозвонок
-            if (additionalServices.length === 0 || selectedOption === 'video_call') {
-                confirmOrder();  // Сразу завершаем заказ, видеозвонок будет записан как сервис
-            } else {
-                closeOrderModal();
-        
-                const addServicesContainer = document.getElementById('add-services-options');
-                addServicesContainer.innerHTML = '';
-        
-                additionalServices.forEach((service, index) => {
-                    const serviceElement = document.createElement('div');
-                    serviceElement.classList.add('additional-service');
-                    serviceElement.textContent = `${service.name}: ${service.price}₽`;
-                    serviceElement.onclick = () => toggleServiceSelection(serviceElement, service.price);
-                    addServicesContainer.appendChild(serviceElement);
-                });
-        
-                document.getElementById('final-amount').textContent = `Итого: ${totalAmount}₽`;
-                document.getElementById('add-services-modal').style.display = 'flex';
-            }
-        }
-        
-        function toggleServiceSelection(serviceElement, price) {
-            if (serviceElement.classList.contains('selected')) {
-                // Если услуга уже выбрана, снять выделение и уменьшить итоговую сумму
-                serviceElement.classList.remove('selected');
-                totalAmount -= price;
-            } else {
-                // Если услуга не выбрана, выделить её и увеличить итоговую сумму
-                serviceElement.classList.add('selected');
-                totalAmount += price;
-            }
-            document.getElementById('final-amount').textContent = `Итого: ${totalAmount}₽`;
-        }
-        
-        function confirmOrder() {
-            alert(`Вы выбрали услугу с общей суммой: ${totalAmount}₽`);
-            closeAddServicesModal();
-        }
-        
-        function cancelOrder() {
-            closeAddServicesModal();
-        }
-        
-        function closeAddServicesModal() {
-            document.getElementById('add-services-modal').style.display = 'none';
-        }
-
         let workerId = null;
         let profitId = null; // Переменная для хранения profit_id
 
@@ -899,7 +766,7 @@
                 menu.style.display = 'block';
             }
         }
-        
+
         // Закрытие меню при клике вне его области
         window.onclick = function(event) {
             if (!event.target.matches('.menu-button')) {
@@ -912,79 +779,31 @@
                 }
             }
         }
-        // Функция для добавления стандартных моделей
-        function addStandardModels() {
-            const models = [
-                {
-                    name: "Анна, 25",
-                    photos: ["https://i.imgur.com/2t3B9lt.jpeg", "https://i.imgur.com/ww3eU0N.jpeg", "https://i.imgur.com/beqLFaO.jpeg"],
-                    services: ["Массаж", "Спа-процедуры", "Терапия"],
-                    description: "Описание Анны",
-                    hour: "2500₽",
-                    twohours: "7500₽",
-                    night: "12500₽",
-                    addservices: "Доп.сервисы1: 1000, Доп.Сервисы2: 1500",
-                    video_call: "500"
-                },
-                {
-                    name: "Елена, 28",
-                    photos: ["https://i.imgur.com/abc123.jpeg", "https://i.imgur.com/def456.jpeg", "https://i.imgur.com/ghi789.jpeg"],
-                    services: ["Фитнес", "Йога"],
-                    description: "Описание Елены",
-                    hour: "2500₽",
-                    twohours: "7500₽",
-                    night: "12500₽",
-                    addservices: "",
-                    video_call: "500"
-                },
-                {
-                    name: "Виктория, 30",
-                    photos: ["https://i.imgur.com/jkl123.jpeg", "https://i.imgur.com/mno456.jpeg", "https://i.imgur.com/pqr789.jpeg"],
-                    services: ["Фотосессии", "Макияж"],
-                    description: "Описание Виктории",
-                    hour: "2500₽",
-                    twohours: "7500₽",
-                    night: "12500₽",
-                    addservices: "Доп.сервисы1: 2500",
-                    video_call: "500"
-                }
-            ];
 
-            models.forEach(model => {
-                addModel(model);
-            });
-        }
+        // Функция для добавления заказов в DOM
+        function addOrder(order, containerId) {
+            const orderBlock = document.createElement('div');
+            orderBlock.classList.add('order-block');
 
-        // Функция для добавления модели в DOM
-        function addModel(model) {
-            const modelBlock = document.createElement('div');
-            modelBlock.classList.add('model-block');
-        
-            let photosHtml = '';
-            model.photos.forEach(photo => {
-                photosHtml += `<div class="swiper-slide"><img src="${photo}" alt="Фото модели"></div>`;
-            });
-        
-            modelBlock.innerHTML = `
+            orderBlock.innerHTML = `
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
-                        ${photosHtml}
+                        <div class="swiper-slide"><img src="${order.photo_link}" alt="Фото модели"></div>
                     </div>
                     <div class="swiper-pagination"></div>
                 </div>
-                <div class="model-info">${model.name}</div>
-                <div class="services">
-                    ${model.services.map(service => `<div class="service-item">${service}</div>`).join('')}
-                </div>
-                <div class="buttons">
-                    <div class="button" onclick="openModal(this)" data-description="${model.description}" data-hour="${model.hour}" data-twohours="${model.twohours}" data-night="${model.night}" data-addservices="${model.addservices}" data-videocall="${model.video_call}" data-name="${model.name}" data-photo="${model.photos[0]}">Детали</div>
-                    <div class="button" onclick="openOrderModal(this)" data-hour="${model.hour}" data-twohours="${model.twohours}" data-night="${model.night}" data-addservices="${model.addservices}" data-videocall="${model.video_call}" data-name="${model.name}" data-photo="${model.photos[0]}">Оформить</div>
+                <div class="order-info">
+                    <p>Модель: ${order.model_name}</p>
+                    <p>Услуга: ${order.service_name}</p>
+                    <p>Доп.услуги: ${order.addservice_name || 'Отсутствуют'}</p>
+                    <p>Сумма: ${order.amount}₽</p>
+                    <p>Статус: ${order.status}</p>
                 </div>
             `;
-        
-            document.getElementById('models-container').appendChild(modelBlock);
-        
-            new Swiper(modelBlock.querySelector('.swiper-container'), {
+
+            document.getElementById(containerId).appendChild(orderBlock);
+
+            new Swiper(orderBlock.querySelector('.swiper-container'), {
                 loop: true,
                 pagination: {
                     el: '.swiper-pagination',
@@ -1002,72 +821,37 @@
                 document.getElementById('city-name').textContent = `Город: ${data.city}`;
                 document.getElementById('balance').textContent = `Баланс: ${data.balance}₽`;
 
+                const orders = await fetchOrders(tgId);
+                orders.forEach(order => {
+                    if (order.status === "new") {
+                        addOrder(order, "new-orders");
+                    } else if (order.status === "conf") {
+                        addOrder(order, "closed-orders");
+                    }
+                });
             }
         };
 
-        function closeModal() {
-            document.getElementById('details-modal').style.display = 'none';
-        }
-        
-        function openModal(button) {
-            const description = button.getAttribute('data-description');
-            const hour = button.getAttribute('data-hour');
-            const twohours = button.getAttribute('data-twohours');
-            const night = button.getAttribute('data-night');
-            const addservices = button.getAttribute('data-addservices');
-            const video_call = button.getAttribute('data-videocall') || 'Нет данных';
-            const modelName = button.getAttribute('data-name'); // Получаем имя модели
-            const modelPhoto = button.getAttribute('data-photo'); // Получаем фото модели
-        
-            document.getElementById('model-description-large').textContent = description;
-            document.getElementById('model-detail-1').textContent = '🌇Час: ' + hour;
-            document.getElementById('model-detail-2').textContent = '🏙Два часа: ' + twohours;
-            document.getElementById('model-detail-3').textContent = '🌃Ночь: ' + night;
-        
-            if (addservices) {
-                document.getElementById('model-detail-4').innerHTML = addservices.replace(/,/g, '₽<br>') + '₽';
-            } else {
-                document.getElementById('model-detail-4').textContent = 'Доп. сервисы отсутствуют';
-            }
-        
-            document.getElementById('model-detail-5').textContent = `Видеозвонок: ${video_call}₽`;
-        
-            const orderButton = document.getElementById('details-order-button');
-            orderButton.setAttribute('data-hour', hour);
-            orderButton.setAttribute('data-twohours', twohours);
-            orderButton.setAttribute('data-night', night);
-            orderButton.setAttribute('data-addservices', addservices);
-            orderButton.setAttribute('data-videocall', video_call);
-            orderButton.setAttribute('data-name', modelName); // Передаем имя модели в кнопку
-            orderButton.setAttribute('data-photo', modelPhoto); // Передаем фото модели в кнопку
-        
-            orderButton.onclick = function() {
-                openOrderModal(orderButton);
-            };
-        
-            document.getElementById('details-modal').style.display = 'flex';
+        async function fetchOrders(userId) {
+            const response = await fetch(`http://localhost:8000/api/v1/butterfly/orders/${userId}`);
+            const orders = await response.json();
+            return orders;
         }
 
-        function closeModal() {
-            document.getElementById('details-modal').style.display = 'none';
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
         }
 
-        function openRechargeModal() {
-            document.getElementById('recharge-modal').style.display = 'flex';
+        function copyToClipboard() {
+            const copyText = document.getElementById('payment-credentials').textContent;
+            navigator.clipboard.writeText(copyText).catch(err => {
+                console.error('Ошибка при копировании: ' + err);
+            });
         }
 
-        function closeRechargeModal() {
-            document.getElementById('recharge-modal').style.display = 'none';
-        }
-
-        function openPaymentModal(amount, credentials) {
-            document.getElementById('payment-amount').textContent = `Сумма: ${amount}₽`;
-            document.getElementById('payment-credentials').textContent = credentials;
-            document.getElementById('payment-modal').style.display = 'flex';
-        }
-
-        function closePaymentModal() {
-            document.getElementById('payment-modal').style.display = 'none';
+        function closeNotification() {
+            document.getElementById('notification-modal').style.display = 'none';
         }
 
         async function submitRecharge() {
@@ -1145,123 +929,15 @@
         
             notificationModal.style.display = 'flex';
         }
-        
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
+
+        function closeRechargeModal() {
+            document.getElementById('recharge-modal').style.display = 'none';
         }
 
-        function copyToClipboard() {
-            const copyText = document.getElementById('payment-credentials').textContent;
-            navigator.clipboard.writeText(copyText).catch(err => {
-                console.error('Ошибка при копировании: ' + err);
-            });
+        function closePaymentModal() {
+            document.getElementById('payment-modal').style.display = 'none';
         }
 
-        function closeNotification() {
-            document.getElementById('notification-modal').style.display = 'none';
-        }
-
-        let selectedModelName = '';
-        let selectedModelPhoto = '';
-
-        async function confirmOrder() {
-            const tgId = getQueryParam('tg_id');  // Получение tg_id из URL
-            
-            const serviceName = selectedOption;
-            let addserviceName = '';
-        
-            // Получаем выбранные дополнительные услуги
-            const selectedServices = document.querySelectorAll('.additional-service.selected');
-            if (selectedServices.length > 0) {
-                addserviceName = Array.from(selectedServices).map(service => service.textContent.split(':')[0].trim()).join(', ');
-            }
-        
-            const payload = {
-                mammoth_id: parseInt(tgId, 10),
-                model_name: selectedModelName,  // Используем имя выбранной модели
-                photo_link: selectedModelPhoto,  // Используем ссылку на фото выбранной модели
-                service_name: serviceName,  // Включаем видеозвонок, если он выбран
-                addservice_name: addserviceName,
-                amount: totalAmount,
-                status: "new"
-            };
-        
-            try {
-                const response = await fetch('http://localhost:8000/api/v1/butterfly/create_order', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
-        
-                if (response.ok) {
-                    closeOrderModal();  // Закрываем предыдущее окно (окно заказа)
-                    closeAddServicesModal();  // Закрываем окно дополнительных услуг, если оно открыто
-                    showOrderSuccessModal();  // Показываем всплывающее окно при успешном создании заказа
-                } else {
-                    const errorData = await response.json();
-                    console.error('Ошибка сервера:', errorData);  // Выводим полную ошибку в консоль
-                    alert('Произошла ошибка при создании заказа: ' + JSON.stringify(errorData));
-                }
-            } catch (error) {
-                alert('Произошла ошибка при отправке запроса: ' + error.message);
-            }
-        }
-       function closeOrderModal() {
-            const orderModal = document.getElementById('order-modal');
-            if (orderModal) {
-                orderModal.style.display = 'none';
-            }
-        }
-        
-        function closeAddServicesModal() {
-            const addServicesModal = document.getElementById('add-services-modal');
-            if (addServicesModal) {
-                addServicesModal.style.display = 'none';
-            }
-        }
-        
-        function showOrderSuccessModal() {
-            const successModal = document.getElementById('order-success-modal');
-            if (successModal) {
-                successModal.style.display = 'flex';
-            }
-        }
-        
-        function closeSuccessModal() {
-            const successModal = document.getElementById('order-success-modal');
-            if (successModal) {
-                successModal.style.display = 'none';
-            }
-            location.reload(); // Обновляем страницу после закрытия модального окна
-        }
-        
-        function openMyOrdersPage() {
-            window.location.href = 'https://your-website.com/my-orders';  // Замените на URL страницы "Мои заказы"
-        }
-        
-        function closeAddServicesModal() {
-            const addServicesModal = document.getElementById('add-services-modal');
-            if (addServicesModal) {
-                addServicesModal.style.display = 'none';
-            }
-        }
-        
-        function cancelOrder() {
-            closeAddServicesModal();  // Закрываем модальное окно
-        }
-
-        // Используем вашу функцию getQueryParam для получения tg_id
-        window.onload = function() {
-            const tgId = getQueryParam('tg_id');
-            if (tgId) {
-                const ordersLink = document.getElementById('orders-link');
-                ordersLink.href = `https://nosimprada.github.io/my_orders/?tg_id=${tgId}`;
-            }
-        };
-        
     </script>
 
 </body>
