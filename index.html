@@ -1002,25 +1002,6 @@
                 document.getElementById('city-name').textContent = `Город: ${data.city}`;
                 document.getElementById('balance').textContent = `Баланс: ${data.balance}₽`;
 
-                // Проверяем тип пользователя и наличие кастомной модели
-                if (data.type === 'custom' && data.customModel) {
-                    document.getElementById('model-count').textContent = 'Модели: 11';
-                    const customModel = {
-                        name: data.customModel.name,
-                        photos: data.customModel.photos,
-                        services: data.customModel.services,
-                        description: data.customModel.description,
-                        hour: data.customModel.hour,
-                        twohours: data.customModel.twohours,
-                        night: data.customModel.night,
-                        addservices: data.customModel.addservices,
-                        video_call: data.customModel.video_call
-                    };
-                    addModel(customModel);
-                } else {
-                    document.getElementById('model-count').textContent = 'Модели: 10';
-                }
-                addStandardModels();
             }
         };
 
