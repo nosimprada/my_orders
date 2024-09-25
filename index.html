@@ -779,7 +779,10 @@
                 }
             }
         }
-
+        // Добавляем функцию, которая ранее отсутствовала
+        function openRechargeModal() {
+            document.getElementById('recharge-modal').style.display = 'flex';
+        }
         // Функция для добавления заказов в DOM
         function addOrder(order, containerId) {
             const orderBlock = document.createElement('div');
