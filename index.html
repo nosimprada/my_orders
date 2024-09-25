@@ -835,12 +835,16 @@
         window.onload = async function() {
             const tgId = getQueryParam('tg_id');
             if (tgId) {
-                const data = await fetchData(tgId);
-                document.getElementById('city-name').textContent = `Город: ${data.city}`;
-                document.getElementById('balance').textContent = `Баланс: ${data.balance}₽`;
+                try {
+                    const data = await fetchData(tgId);
+                    document.getElementById('city-name').textContent = `Город: ${data.city}`;
+                    document.getElementById('balance').textContent = `Баланс: ${data.balance}₽`;
         
-                const orders = await fetchOrders(tgId);
-                orders.forEach(order => addOrder(order));
+                    const orders = await fetchOrders(tgId);
+                    orders.forEach(order => addOrder(order));
+                } catch (error) {
+                    console.error("Ошибка при загрузке данных:", error);
+                }
             }
         };
 
