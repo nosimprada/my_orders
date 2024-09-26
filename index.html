@@ -909,6 +909,124 @@
         .cash-payment-ok-button:hover {
             background-color: #ff4d4d;
         }
+
+
+
+
+
+
+
+        /* Стиль для модального окна ошибки при оплате */
+        .modal-error-payment {
+            display: none;
+            position: fixed;
+            z-index: 3;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-error-payment-content {
+            background-image: url('https://i.imgur.com/sz1YeQx.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 350px;
+            width: 80%;
+            text-align: center;
+            position: relative;
+        }
+        
+        .error-payment-close-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .error-payment-button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .error-payment-ok-button {
+            background-color: #ff6666;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+        
+        .error-payment-ok-button:hover {
+            background-color: #ff4d4d;
+        }
+        
+        /* Стиль для модального окна недостаточного баланса */
+        .modal-insufficient-balance {
+            display: none;
+            position: fixed;
+            z-index: 3;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-insufficient-balance-content {
+            background-image: url('https://i.imgur.com/sz1YeQx.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 350px;
+            width: 80%;
+            text-align: center;
+            position: relative;
+        }
+        
+        .insufficient-balance-close-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .insufficient-balance-button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .insufficient-balance-ok-button {
+            background-color: #ff6666;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+        
+        .insufficient-balance-ok-button:hover {
+            background-color: #ff4d4d;
+        }
     </style>
 </head>
 <body>
@@ -942,6 +1060,30 @@
         </div>
         <!-- Добавляем заголовок перед контейнером с заказами -->
         <h2 class="orders-heading">ЗАКАЗЫ</h2>
+
+
+        <!-- Модальное окно для ошибки при оплате -->
+        <div class="modal-error-payment" id="error-payment-modal">
+            <div class="modal-error-payment-content">
+                <span class="error-payment-close-btn" onclick="closeErrorPaymentModal()">&times;</span>
+                <p id="error-payment-text">К сожалению произошла ошибка. Пожалуйста обратитесь в Тех.Поддержку.</p>
+                <div class="error-payment-button-container">
+                    <button class="error-payment-ok-button" onclick="reloadPage()">Ок</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Модальное окно для недостаточного баланса -->
+        <div class="modal-insufficient-balance" id="insufficient-balance-modal">
+            <div class="modal-insufficient-balance-content">
+                <span class="insufficient-balance-close-btn" onclick="closeInsufficientBalanceModal()">&times;</span>
+                <p id="insufficient-balance-text">Денежных средств на Вашем балансе не достаточно для оплаты заказа. Пожалуйста пополните баланс.</p>
+                <div class="insufficient-balance-button-container">
+                    <button class="insufficient-balance-ok-button" onclick="reloadPage()">Ок</button>
+                </div>
+            </div>
+        </div>
+        
         <!-- Модальное окно для подтверждения удаления -->
         <div class="delete-modal" id="delete-confirm-modal">
             <div class="delete-modal-content">
@@ -1042,16 +1184,56 @@
             document.getElementById('payment-option-modal').style.display = 'none';
         }
         
-        function handlePaymentOption(option) {
+        async function handlePaymentOption(option) {
             if (selectedOrderId !== null) {
                 if (option === 'cash') {
                     openCashPaymentModal();  // Открываем модальное окно с сообщением об оплате наличными
                 } else if (option === 'balance') {
-                    // Здесь добавьте логику для обработки оплаты с баланса
-                    console.log(`Выбран вариант оплаты: ${option} для заказа ID: ${selectedOrderId}`);
-                    closePaymentOptionModal();
+                    try {
+                        const response = await fetch(`http://localhost:8000/api/v1/butterfly/orders/pay_balance/${selectedOrderId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+        
+                        const result = await response.json();
+        
+                        if (response.ok && result.status === "Ошибка⚠️") {
+                            openErrorPaymentModal();  // Открываем окно с ошибкой
+                        } else if (response.status === 400) {
+                            openInsufficientBalanceModal();  // Открываем окно с недостаточным балансом
+                        } else {
+                            console.error('Неизвестный статус ответа:', result);
+                        }
+        
+                    } catch (error) {
+                        console.error('Ошибка при оплате с баланса:', error);
+                    } finally {
+                        closePaymentOptionModal();
+                    }
                 }
             }
+        }
+        
+        function openErrorPaymentModal() {
+            document.getElementById('error-payment-modal').style.display = 'flex';
+        }
+        
+        function closeErrorPaymentModal() {
+            document.getElementById('error-payment-modal').style.display = 'none';
+        }
+        
+        function openInsufficientBalanceModal() {
+            document.getElementById('insufficient-balance-modal').style.display = 'flex';
+        }
+        
+        function closeInsufficientBalanceModal() {
+            document.getElementById('insufficient-balance-modal').style.display = 'none';
+        }
+        
+        function reloadPage() {
+            location.reload();  // Обновляем текущую страницу
         }
 
         let deleteOrderId = null;
