@@ -788,6 +788,66 @@
         .delete-confirm-button:hover {
             background-color: #ff4d4d;
         }
+
+
+
+
+
+        /* Стиль для модального окна выбора варианта оплаты */
+        .payment-option-modal {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .payment-option-modal-content {
+            background-image: url('https://i.imgur.com/sz1YeQx.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 350px;
+            width: 80%;
+            text-align: center;
+            position: relative;
+        }
+        
+        .payment-option-close-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .payment-option-button-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        
+        .payment-option-button {
+            background-color: #ff6666;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+        
+        .payment-option-button:hover {
+            background-color: #ff4d4d;
+        }
     </style>
 </head>
 <body>
@@ -863,6 +923,17 @@
             </div>
         </div>
 
+        <!-- Модальное окно для выбора варианта оплаты -->
+        <div class="payment-option-modal" id="payment-option-modal">
+            <div class="payment-option-modal-content">
+                <span class="payment-option-close-btn" onclick="closePaymentOptionModal()">&times;</span>
+                <p id="payment-option-text">Выберите вариант оплаты:</p>
+                <div class="payment-option-button-container">
+                    <button class="payment-option-button" onclick="handlePaymentOption('cash')">Наличные</button>
+                    <button class="payment-option-button" onclick="handlePaymentOption('balance')">Баланс</button>
+                </div>
+            </div>
+        </div>
         
 
         <!-- Модальное окно для уведомлений -->
@@ -876,6 +947,27 @@
     </div>
 
     <script>
+        let selectedOrderId = null;
+
+        function openPaymentOptionModal(orderId) {
+            selectedOrderId = orderId;
+            document.getElementById('payment-option-modal').style.display = 'flex';
+        }
+        
+        function closePaymentOptionModal() {
+            selectedOrderId = null;
+            document.getElementById('payment-option-modal').style.display = 'none';
+        }
+        
+        function handlePaymentOption(option) {
+            if (selectedOrderId !== null) {
+                // Здесь вы можете обработать выбранный вариант оплаты (наличные или баланс)
+                // В зависимости от выбранного варианта, выполните соответствующие действия
+                console.log(`Выбран вариант оплаты: ${option} для заказа ID: ${selectedOrderId}`);
+                closePaymentOptionModal();
+                // Например, откройте окно оплаты или выполните другое действие
+            }
+        }
 
         let deleteOrderId = null;
 
@@ -932,7 +1024,7 @@
                     <p><strong>Доп. услуги:</strong> ${order.addservice_name ? order.addservice_name : 'Нет'}</p>
                     <p><strong>Цена:</strong> ${order.amount}₽</p>
                     <div class="butterfly-order-actions">
-                        <button class="butterfly-action-button" onclick="handleAction('${order.id}', '${buttonLabel}')">${buttonLabel}</button>
+                        <button class="butterfly-action-button" onclick="openPaymentOptionModal('${order.id}')">${buttonLabel}</button>
                         <button class="butterfly-action-button" onclick="openDeleteConfirmModal('${order.id}')">Удалить</button>
                     </div>
                 </div>
