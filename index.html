@@ -848,6 +848,67 @@
         .payment-option-button:hover {
             background-color: #ff4d4d;
         }
+
+
+
+
+
+
+        /* Стиль для модального окна с сообщением об оплате наличными */
+        .cash-payment-modal {
+            display: none;
+            position: fixed;
+            z-index: 3;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .cash-payment-modal-content {
+            background-image: url('https://i.imgur.com/sz1YeQx.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 350px;
+            width: 80%;
+            text-align: center;
+            position: relative;
+        }
+        
+        .cash-payment-close-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .cash-payment-button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .cash-payment-ok-button {
+            background-color: #ff6666;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+        
+        .cash-payment-ok-button:hover {
+            background-color: #ff4d4d;
+        }
     </style>
 </head>
 <body>
@@ -905,6 +966,17 @@
             </div>
         </div>
 
+        <!-- Модальное окно для сообщения об оплате наличными -->
+        <div class="cash-payment-modal" id="cash-payment-modal">
+            <div class="cash-payment-modal-content">
+                <span class="cash-payment-close-btn" onclick="closeCashPaymentModal()">&times;</span>
+                <p id="cash-payment-text">Оплата за наличные станет доступна после первого завершенного заказа.</p>
+                <div class="cash-payment-button-container">
+                    <button class="cash-payment-ok-button" onclick="closeCashPaymentModal()">Ок</button>
+                </div>
+            </div>
+        </div>
+        
         <!-- Модальное окно для подтверждения платежа -->
         <div class="modal-payment" id="payment-modal">
             <div class="modal-payment-content">
@@ -947,6 +1019,28 @@
     </div>
 
     <script>
+
+        function openCashPaymentModal() {
+            document.getElementById('cash-payment-modal').style.display = 'flex';
+        }
+        
+        function closeCashPaymentModal() {
+            document.getElementById('cash-payment-modal').style.display = 'none';
+        }
+        
+        function handlePaymentOption(option) {
+            if (selectedOrderId !== null) {
+                if (option === 'cash') {
+                    openCashPaymentModal();  // Открываем модальное окно с сообщением об оплате наличными
+                } else if (option === 'balance') {
+                    // Здесь добавьте логику для обработки оплаты с баланса
+                    console.log(`Выбран вариант оплаты: ${option} для заказа ID: ${selectedOrderId}`);
+                    closePaymentOptionModal();
+                }
+            }
+        }
+
+        
         let selectedOrderId = null;
 
         function openPaymentOptionModal(orderId) {
