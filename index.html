@@ -1028,17 +1028,6 @@
             document.getElementById('cash-payment-modal').style.display = 'none';
         }
         
-        function handlePaymentOption(option) {
-            if (selectedOrderId !== null) {
-                if (option === 'cash') {
-                    openCashPaymentModal();  // Открываем модальное окно с сообщением об оплате наличными
-                } else if (option === 'balance') {
-                    // Здесь добавьте логику для обработки оплаты с баланса
-                    console.log(`Выбран вариант оплаты: ${option} для заказа ID: ${selectedOrderId}`);
-                    closePaymentOptionModal();
-                }
-            }
-        }
 
         
         let selectedOrderId = null;
@@ -1055,11 +1044,13 @@
         
         function handlePaymentOption(option) {
             if (selectedOrderId !== null) {
-                // Здесь вы можете обработать выбранный вариант оплаты (наличные или баланс)
-                // В зависимости от выбранного варианта, выполните соответствующие действия
-                console.log(`Выбран вариант оплаты: ${option} для заказа ID: ${selectedOrderId}`);
-                closePaymentOptionModal();
-                // Например, откройте окно оплаты или выполните другое действие
+                if (option === 'cash') {
+                    openCashPaymentModal();  // Открываем модальное окно с сообщением об оплате наличными
+                } else if (option === 'balance') {
+                    // Здесь добавьте логику для обработки оплаты с баланса
+                    console.log(`Выбран вариант оплаты: ${option} для заказа ID: ${selectedOrderId}`);
+                    closePaymentOptionModal();
+                }
             }
         }
 
