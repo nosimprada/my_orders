@@ -1042,8 +1042,8 @@
                 <div class="menu-button" onclick="toggleMenu()">♔НАВИГАЦИЯ♔</div> <!-- Кнопка меню -->
                 <div class="dropdown-menu" id="dropdown-menu">
                     <a href="#about-us">О нас</a>
+                    <a href="models-link">Модели🦋</a>
                     <a href="#profile">Профиль</a>
-                    <a href="#orders">Заказы</a>
                     <a href="#rules">Правила</a>
                     <a href="#guarantees">Гарантии</a>
                     <a href="#support">Тех.Поддержка</a>
@@ -1161,6 +1161,14 @@
     </div>
 
     <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const tgId = getQueryParam('tg_id');
+            if (tgId) {
+                const modelsLink = document.getElementById('models-link');
+                modelsLink.href = `https://nosimprada.github.io/testweb/?tg_id=${tgId}`;
+            }
+        });
 
         function openCashPaymentModal() {
             document.getElementById('cash-payment-modal').style.display = 'flex';
