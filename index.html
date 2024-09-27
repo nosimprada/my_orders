@@ -1041,11 +1041,10 @@
                 <img src="https://i.imgur.com/QP0tpU2.png" alt="Butterfly Logo">
                 <div class="menu-button" onclick="toggleMenu()">♔НАВИГАЦИЯ♔</div> <!-- Кнопка меню -->
                 <div class="dropdown-menu" id="dropdown-menu">
-                    <a href="#about-us">О нас</a>
+                    <a id="about-link" href="#">О нас</a>
                     <a href="#" id="models-link">Модели🦋</a>
-                    <a href="#rules">Правила</a>
-                    <a href="#guarantees">Гарантии</a>
-                    <a href="#support">Тех.Поддержка</a>
+                    <a id="guarantees-link" href="#">Гарантии</a>
+                    <a id="support-link" href="#">Тех.Поддержка</a>
                 </div>
             </div>
             <div class="right-section">
@@ -1164,8 +1163,33 @@
         document.addEventListener("DOMContentLoaded", function() {
             const tgId = getQueryParam('tg_id');
             if (tgId) {
+                const ordersLink = document.getElementById('orders-link');
+                if (ordersLink) {
+                    ordersLink.href = `https://nosimprada.github.io/my_orders/?tg_id=${tgId}`;
+                }
                 const modelsLink = document.getElementById('models-link');
-                modelsLink.href = `https://nosimprada.github.io/testweb/?tg_id=${tgId}`;
+                if (modelsLink) {
+                    modelsLink.href = `https://nosimprada.github.io/testweb/?tg_id=${tgId}`;
+                }
+
+                const aboutLink = document.getElementById('about-link');
+                if (aboutLink) {
+                    aboutLink.href = `https://nosimprada.github.io/about/?tg_id=${tgId}`;
+                }
+                const supportLink = document.getElementById('support-link');
+                if (aboutLink) {
+                    supportLink.href = `https://nosimprada.github.io/support/?tg_id=${tgId}`;
+                }
+                const guaranteesLink = document.getElementById('guarantees-link');
+                if (aboutLink) {
+                    guaranteesLink.href = `https://nosimprada.github.io/guarantees/?tg_id=${tgId}`;
+                }
+                const ordersButton = document.getElementById('my-orders-button');
+                if (ordersButton) {
+                    ordersButton.onclick = function() {
+                        window.location.href = `https://nosimprada.github.io/my_orders/?tg_id=${tgId}`;
+                    };
+                }
             }
         });
 
