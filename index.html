@@ -1311,6 +1311,11 @@
             const orderContainer = document.createElement('div');
             orderContainer.classList.add('butterfly-order-container');
         
+            // Определяем действие для кнопки в зависимости от статуса заказа
+            const buttonAction = order.status === "Ошибка⚠️" 
+                ? `window.location.href='https://t.me/NightbutterflySupport'` // Ссылка на поддержку
+                : `openPaymentOptionModal('${order.id}')`; // Функция оплаты
+        
             const buttonLabel = order.status === "Ошибка⚠️" ? "Поддержка" : "Оплатить";
         
             orderContainer.innerHTML = `
@@ -1324,7 +1329,7 @@
                     <p><strong>Доп. услуги:</strong> ${order.addservice_name ? order.addservice_name : 'Нет'}</p>
                     <p><strong>Цена:</strong> ${order.amount}₽</p>
                     <div class="butterfly-order-actions">
-                        <button class="butterfly-action-button" onclick="openPaymentOptionModal('${order.id}')">${buttonLabel}</button>
+                        <button class="butterfly-action-button" onclick="${buttonAction}">${buttonLabel}</button>
                         <button class="butterfly-action-button" onclick="openDeleteConfirmModal('${order.id}')">Удалить</button>
                     </div>
                 </div>
